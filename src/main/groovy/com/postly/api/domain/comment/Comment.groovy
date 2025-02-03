@@ -1,28 +1,30 @@
-package com.example.demo.domain.forum
+package com.postly.api.domain.comment
 
-import com.example.demo.domain.user.User
+import com.postly.api.domain.member.Member
+import com.postly.api.domain.topic.Topic
 import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
-import org.hibernate.annotations.ManyToAny
 
-@Table(name = "forum")
+@Table(name = "comment")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class Forum {
+class Comment {
     @Id
     @GeneratedValue
     private UUID id
-    private String name
-    private String description
+    private String content
 
-    @Column(name = "created_by")
-    @ManyToAny
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User createdBy
+    private Member user
+
+    @OneToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic
 
     @Column(name = "created_at")
     private Date createdAt

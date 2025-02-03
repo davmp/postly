@@ -28,9 +28,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools:3.3.2'
     implementation 'org.projectlombok:lombok:1.18.34'
     implementation 'org.postgresql:postgresql:42.7.3'
+//    implementation 'org.flywaydb:flyway-core:10.15.2'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.14.0'
+    implementation 'com.amazonaws:aws-java-sdk:1.12.765'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+tasks.withType(GroovyCompile).configureEach {
+    groovyOptions.parameters = true
 }
 apply plugin: 'groovy'

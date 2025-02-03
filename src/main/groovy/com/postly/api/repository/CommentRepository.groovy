@@ -1,6 +1,6 @@
-package com.example.demo.repository
+package com.postly.api.repository
 
-import com.example.demo.domain.comment.Comment
+import com.postly.api.domain.comment.Comment
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CommentRepository extends JpaRepository<Comment, UUID> {
