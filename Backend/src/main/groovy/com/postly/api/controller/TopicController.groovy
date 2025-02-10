@@ -8,6 +8,7 @@ import org.apache.coyote.BadRequestException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
@@ -35,11 +36,12 @@ class TopicController {
 
     @PostMapping(consumes = "multipart/form-data")
     ResponseEntity<TopicResponseDto> create(
-            @RequestParam("member_id") String member_id,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("files") List<MultipartFile> files
     ) {
+        println "CONTEXTO: " + SecurityContextHolder.getContext()
+
         if (title.trim().size() < 5 || title.trim().size() > 20) {
             throw new BadRequestException("Title must be between 5 and 100 characters long")
         }
