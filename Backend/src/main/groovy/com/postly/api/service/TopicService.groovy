@@ -45,7 +45,7 @@ class TopicService {
     }
 
     TopicResponseDto create(@Valid TopicRequestDto data) {
-        Member member = this.memberService.getById(data.member_id()).orElseThrow(() -> new BadRequestException("Member does not exist"))
+        Member member = this.memberService.loadUserByUsername(data.username())
 
         Topic newTopic = new Topic()
         newTopic.setTitle(data.title().strip())

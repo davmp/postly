@@ -1,5 +1,6 @@
 package com.postly.api.controller
 
+import com.postly.api.domain.member.Member
 import com.postly.api.domain.topic.TopicRequestDto
 import com.postly.api.domain.topic.TopicResponseDto
 import com.postly.api.domain.topic.TopicUpdateRequestDto
@@ -40,7 +41,9 @@ class TopicController {
             @RequestParam("content") String content,
             @RequestParam("files") List<MultipartFile> files
     ) {
-        println "CONTEXTO: " + SecurityContextHolder.getContext()
+        Member member = (Member) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal()
 
         if (title.trim().size() < 5 || title.trim().size() > 20) {
             throw new BadRequestException("Title must be between 5 and 100 characters long")
@@ -49,12 +52,13 @@ class TopicController {
             throw new BadRequestException("Limit of ${fileMax} reached")
         }
 
-        return ResponseEntity.ok(this.topicService.create(new TopicRequestDto(
-                member_id: UUID.fromString(member_id),
-                title: title,
-                content: content,
-                media: files
-        )))
+        return ResponseEntity.ok(this.topicService.create(
+                new TopicRequestDto(
+                        username: member.getUsername(),
+                        title: title,
+                        content: content,
+                        media: files
+                )))
     }
 
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
