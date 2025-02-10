@@ -1,6 +1,6 @@
 <template>
   <div class="input-field">
-    <div v-if="imgSrc" v-html="imgSrc" :class="imgClass" />
+    <div v-if="!!imgSrc" v-html="imgSrc" :class="imgClass" />
     <input
       :type="type"
       :id="id"
@@ -70,7 +70,7 @@ export default defineComponent({
 .input-field {
   width: 100%;
   max-width: 300px;
-  height: 2rem;
+  height: 2.3rem;
 
   display: flex;
   align-items: center;
@@ -78,7 +78,7 @@ export default defineComponent({
   background-color: var(--foreground);
   border: 2px solid var(--border);
   border-radius: 0.5rem;
-  padding: 0 0.5rem;
+  padding: 0 0.7rem;
   cursor: text;
 
   &:has(input:focus) {

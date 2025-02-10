@@ -1,11 +1,21 @@
 <script lang="ts" setup>
 import { Header, Form, Footer } from '@/components/login'
-import { useAuth } from '@/api/auth';
+import { useAuth } from '@/api/auth'
+import { toast } from 'vue3-toastify'
+import router from '@/router'
 
-const auth = useAuth();
+const auth = useAuth()
 
-function handleCreateUser(user: { username: string; password: string }) {
-  auth.login(user);
+async function handleCreateUser(user: { username: string; password: string }) {
+  const response = await auth.login(user)
+
+  if (response.status !== 200) {
+    toast.error('Login failed')
+    console.error(response)
+  } else {
+    toast.success('Welcome back')
+    router.push({ name: 'home' })
+  }
 }
 </script>
 

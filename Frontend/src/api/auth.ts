@@ -26,7 +26,7 @@ export const useAuth = defineStore('auth', () => {
     try {
       const response = await axios.post('/api/auth/login', { username, password })
       setUser(response.data)
-      console.log(response.data)
+      return response
     } catch (error) {
       console.error('Failed to login: ', error)
       throw error
