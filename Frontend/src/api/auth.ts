@@ -1,24 +1,29 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import axios from '@/service/http'
-
-const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 interface User {
   username: string
+  token: string
+  profilePictureUrl: string
 }
 
 export const useAuth = defineStore('auth', () => {
-  const user = ref(localStorage.getItem('user'))
-  const isAuth = ref(!!user.value)
+  const userRef = ref<User | null>(
+    localStorage.getItem('user')
+      ? (JSON.parse(localStorage.getItem('user') as string) as User)
+      : null,
+  )
+  const user = computed(() => userRef.value)
+  const isAuth = computed(() => !!user.value)
 
-  function setUser(user: User | null) {
-    if (user && user.username) {
-      localStorage.setItem('user', JSON.stringify(user))
-      isAuth.value = true
+  function setUser(data: User | null) {
+    if (data && data.username) {
+      localStorage.setItem('user', JSON.stringify(data))
+      userRef.value = data
     } else {
       localStorage.removeItem('user')
-      isAuth.value = false
+      userRef.value = null
     }
   }
 
@@ -33,8 +38,23 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  async function logout({ state }) {
-    state.user = null
+  async function register({ username, password, picture }) {
+    try {
+      const response = await axios.post('/api/auth/register', {
+        username,
+        password,
+        picture,
+      })
+      setUser(response.data)
+      return response
+    } catch (error) {
+      console.error('Failed to register: ', error)
+      throw error
+    }
+  }
+
+  async function logout() {
+    setUser(null)
   }
 
   return {
@@ -42,6 +62,7 @@ export const useAuth = defineStore('auth', () => {
     user,
     setUser,
     login,
+    register,
     logout,
   }
 })

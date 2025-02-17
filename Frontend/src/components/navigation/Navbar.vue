@@ -3,6 +3,11 @@ import { RouterLink } from 'vue-router'
 import { Input } from '../reuse/input'
 import { Button } from '../reuse/button'
 import searchIcon from '@/assets/icons/search.svg?raw'
+import { useAuth } from '@/api/auth'
+import { storeToRefs } from 'pinia'
+
+const auth = useAuth()
+const { isAuth, user } = storeToRefs(auth)
 </script>
 
 <template>
@@ -18,9 +23,14 @@ import searchIcon from '@/assets/icons/search.svg?raw'
         <input type="text" placeholder="Search" />
       </div> -->
       <Input type="text" placeholder="Search" :imgSrc="searchIcon" imgClass="img" />
-      <div class="action">
+      <div class="action" v-if="!isAuth">
         <Button @click="$router.push('/login')" class="button">Sign In</Button>
-        <!-- <RouterLink to="/login" class="btn">Login</RouterLink> -->
+      </div>
+
+      <!-- <div class="profile" v-if="isAuth" @click="$router.push('/profile')"> -->
+      <div class="profile" v-if="isAuth" @click="auth.logout()">
+        <p>{{ user?.username }}</p>
+        <img :src="user?.profilePictureUrl" />
       </div>
     </div>
   </header>
@@ -75,6 +85,25 @@ import searchIcon from '@/assets/icons/search.svg?raw'
     & .button {
       background-color: var(--primary);
       color: var(--primary-content);
+    }
+  }
+
+  & .profile {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 15px;
+
+    & img {
+      --size: 2rem;
+      width: var(--size);
+      height: var(--size);
+
+      border-radius: 0.5rem;
+      border: 2px solid var(--border);
+      cursor: pointer;
     }
   }
 }

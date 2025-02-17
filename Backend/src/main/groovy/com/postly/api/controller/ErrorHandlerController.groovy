@@ -24,7 +24,7 @@ class ErrorHandlerController {
 
     @ExceptionHandler(UnauthenticatedException.class)
     ResponseEntity handleUnauthorized(UnauthenticatedException ex) {
-        return ResponseEntity.status(401).build()
+        return ResponseEntity.status(401).body(ex.getMessage()).build()
     }
 
     @ExceptionHandler(BadRequestException.class)
@@ -37,10 +37,10 @@ class ErrorHandlerController {
         return ResponseEntity.badRequest().body(ex.getMessage())
     }
 
-    @ExceptionHandler(Exception.class)
-    ResponseEntity handleInternalServerError(Exception ex) {
-        return ResponseEntity.internalServerError().body(ex.getMessage())
-    }
+//    @ExceptionHandler(Exception.class)
+//    ResponseEntity handleInternalServerError(Exception ex) {
+//        return ResponseEntity.internalServerError().body(ex.getMessage())
+//    }
 
     private record ValidationErrorData(String field, String message) {
         ValidationErrorData(FieldError error) {

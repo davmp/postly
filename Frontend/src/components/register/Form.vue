@@ -6,6 +6,7 @@ import { toast } from 'vue3-toastify'
 
 const username = ref('')
 const password = ref('')
+const picture = ref<File | null>(null)
 
 const emit = defineEmits(['create-user'])
 
@@ -20,12 +21,14 @@ const handleSubmit = (e: Event) => {
   const user = {
     username: username.value,
     password: password.value,
+    picture: picture.value,
   }
 
   emit('create-user', user)
 
   // username.value = ''
-  password.value = ''
+  // password.value = ''
+  // picture.value = null
 }
 </script>
 
@@ -33,7 +36,8 @@ const handleSubmit = (e: Event) => {
   <form class="form" v-on:submit="handleSubmit">
     <Input v-model:value="username" placeholder="Username" class="input" />
     <Input v-model:value="password" placeholder="Password" type="password" class="input" />
-    <Button type="submit"> Sign In </Button>
+    <input :value="picture" type="file" class="input" />
+    <Button type="submit"> Register </Button>
   </form>
 </template>
 
