@@ -29,7 +29,16 @@ export const useAuth = defineStore('auth', () => {
 
   async function login({ username, password }) {
     try {
-      const response = await axios.post('/api/auth/login', { username, password })
+      const response = await axios.post(
+        '/api/auth/login',
+        {
+          username,
+          password,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
       setUser(response.data)
       return response
     } catch (error) {
@@ -38,13 +47,28 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  async function register({ username, password, picture }) {
+  async function register({
+    username,
+    password,
+    picture,
+  }: {
+    username: string
+    password: string
+    picture: File | null
+  }) {
     try {
-      const response = await axios.post('/api/auth/register', {
-        username,
-        password,
-        picture,
-      })
+      console.warn('register::', picture?.name)
+      const response = await axios.post(
+        '/api/auth/register',
+        {
+          username,
+          password,
+          picture,
+        },
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        },
+      )
       setUser(response.data)
       return response
     } catch (error) {

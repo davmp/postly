@@ -30,14 +30,18 @@ const handleSubmit = (e: Event) => {
   // password.value = ''
   // picture.value = null
 }
+
+const uploadFile = (event: Event) => {
+  picture.value = (event.target as HTMLInputElement).files?.[0] || null
+}
 </script>
 
 <template>
   <form class="form" v-on:submit="handleSubmit">
     <Input v-model:value="username" placeholder="Username" class="input" />
     <Input v-model:value="password" placeholder="Password" type="password" class="input" />
-    <input :value="picture" type="file" class="input" />
-    <Button type="submit"> Register </Button>
+    <input @change="uploadFile" type="file" class="input" />
+    <Button @change="handleSubmit"> Register </Button>
   </form>
 </template>
 

@@ -5,6 +5,7 @@ import org.apache.coyote.BadRequestException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.AuthenticationException
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -37,10 +38,15 @@ class ErrorHandlerController {
         return ResponseEntity.badRequest().body(ex.getMessage())
     }
 
-//    @ExceptionHandler(Exception.class)
-//    ResponseEntity handleInternalServerError(Exception ex) {
-//        return ResponseEntity.internalServerError().body(ex.getMessage())
-//    }
+    @ExceptionHandler(AuthenticationException.class)
+    ResponseEntity handleBadRequest(AuthenticationException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage())
+    }
+
+    @ExceptionHandler(Exception.class)
+    ResponseEntity handleInternalServerError(Exception ex) {
+        return ResponseEntity.internalServerError().body(ex.getMessage())
+    }
 
     private record ValidationErrorData(String field, String message) {
         ValidationErrorData(FieldError error) {
